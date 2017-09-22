@@ -27,13 +27,12 @@ enum Commands
 	HELLO,
 	LIST,
 	OPEN_SERIAL_PORT,
-	WRITE_TO_SERIAL
+	WRITE_TO_SERIAL,
+	READ_FROM_SERIAL
 };
 
 Session::Session(boost::asio::io_service& io_service) : socket_(io_service), io_service_(io_service)
 {
-	//serial = new Serial(io_service);
-	//serial->open("COM4");
 }
 
 tcp::socket& Session::socket()
@@ -60,8 +59,6 @@ void Session::menu()
 	std::cout << "am intrat pe meniu" << std::endl;
 
 	int cmd = data_[0] - '0';
-	//std::string cmd(data_);
-	//std::cout << cmd.c_str() << std::endl;
 
 	switch (cmd)
 	{
@@ -127,6 +124,7 @@ void Session::menu()
 				boost::bind(&Session::handle_write, this,
 				boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
 		}
+		break;
 	}
 	case Commands::WRITE_TO_SERIAL:
 	{
@@ -137,6 +135,26 @@ void Session::menu()
 			boost::asio::buffer("am scris"),
 			boost::bind(&Session::handle_write, this,
 			boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+		break;
+	}
+	case Commands::READ_FROM_SERIAL:
+	{
+		text = Serial::getInstance(io_service_)->read();
+		if (text.length() > 0)
+		{
+			boost::asio::async_write(socket_,
+				boost::asio::buffer(text),
+				boost::bind(&Session::handle_write, this,
+				boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+		}
+		else
+		{
+			boost::asio::async_write(socket_,
+				boost::asio::buffer("nimic de citit"),
+				boost::bind(&Session::handle_write, this,
+				boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+		}
+
 		break;
 	}
 	}

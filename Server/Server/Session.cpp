@@ -112,11 +112,21 @@ void Session::menu()
 	}
 	case Commands::OPEN_SERIAL_PORT:
 	{
-		Serial::getInstance(io_service_)->open("COM4");
-		boost::asio::async_write(socket_,
-			boost::asio::buffer("Port serial deschis"),
-			boost::bind(&Session::handle_write, this,
-			boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+		if (!Serial::getInstance(io_service_)->isOpen())
+		{
+			Serial::getInstance(io_service_)->open("COM4");
+			boost::asio::async_write(socket_,
+				boost::asio::buffer("Port serial deschis"),
+				boost::bind(&Session::handle_write, this,
+				boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+		}
+		else
+		{
+			boost::asio::async_write(socket_,
+				boost::asio::buffer("Port serial este deja deschis"),
+				boost::bind(&Session::handle_write, this,
+				boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+		}
 	}
 	case Commands::WRITE_TO_SERIAL:
 	{

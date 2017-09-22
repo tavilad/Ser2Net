@@ -51,12 +51,14 @@ void Serial::handle_write(const boost::system::error_code& error, size_t len)
 	}
 }
 
-void Serial::read()
+std::string Serial::read()
 {
-	sPort.async_read_some(boost::asio::buffer(data_, 512),
+	sPort.async_read_some(boost::asio::buffer(data_, 50),
 		boost::bind(&Serial::handle_read,
 		this,
 		boost::asio::placeholders::error));
+
+	return std::string(data_);
 }
 
 void Serial::handle_read(const boost::system::error_code& error)

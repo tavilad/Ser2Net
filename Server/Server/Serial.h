@@ -6,7 +6,6 @@
 class Serial
 {
 public:
-
 	static Serial* getInstance(boost::asio::io_service& io_service);
 	void open(const std::string& portname);
 	void close();
@@ -17,7 +16,7 @@ public:
 	//boost::asio::serial_port_base::stop_bits::type stopbits,
 	//boost::asio::serial_port_base::flow_control::type flowcontrol);
 	void write();
-	void read();
+	std::string read();
 	void handle_write(const boost::system::error_code& error, size_t len);
 	void handle_read(const boost::system::error_code& error);
 	~Serial();

@@ -1,19 +1,18 @@
 #include "Serial.h"
 #include <iostream>
 
-//static Serial *instance = 0;
-//static boost::asio::io_service ioservice;
+static Serial *instance = 0;
 
 Serial::Serial(boost::asio::io_service& io_service) :sPort(io_service)
 {
 }
 
-/*Serial* Serial::getInstance()
+Serial* Serial::getInstance(boost::asio::io_service& io_service)
 {
-if (!instance)
-instance = new Serial(ioservice);
-return instance;
-}*/
+	if (!instance)
+		instance = new Serial(io_service);
+	return instance;
+}
 
 void Serial::open(const std::string& portname)
 //int baudrate,

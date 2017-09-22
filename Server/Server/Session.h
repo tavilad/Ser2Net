@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+#pragma once
 #include "Serial.h"
 #include <cstdlib>
 #include <iostream>
@@ -17,7 +18,7 @@ class Session
 public:
 	Session(boost::asio::io_service& io_service);
 	tcp::socket& socket();
-	Serial *serial;
+	//Serial *serial;
 	void start();
 	void menu();
 	void handle_write(const boost::system::error_code& error, size_t len);
@@ -30,4 +31,5 @@ private:
 	std::string text;
 	std::string commandd;
 	std::string ip;
+	boost::asio::io_service& io_service_;
 };

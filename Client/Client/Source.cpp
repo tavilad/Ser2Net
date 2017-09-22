@@ -23,7 +23,8 @@ int main()
 		std::cout << "1. Daytime" << std::endl;
 		std::cout << "2. Hello" << std::endl;
 		std::cout << "3. Connected clients ip" << std::endl;
-		std::cout << "4. Write to serial port" << std::endl;
+		std::cout << "4. Open serial port" << std::endl;
+		std::cout << "5. Write to serial port" << std::endl;
 		std::cout << "0. Close client" << std::endl;
 		int option;
 		std::cin >> option;
@@ -45,6 +46,9 @@ int main()
 				break;
 			case 4:
 				boost::asio::write(socket, boost::asio::buffer("3"));
+				break;
+			case 5:
+				boost::asio::write(socket, boost::asio::buffer("4"));
 				break;
 			default:
 				std::cout << "invalid command" << std::endl;
@@ -70,6 +74,8 @@ int main()
 			std::cout << "1. Daytime" << std::endl;
 			std::cout << "2. Hello" << std::endl;
 			std::cout << "3. Connected clients ip" << std::endl;
+			std::cout << "4. Open serial port" << std::endl;
+			std::cout << "5. Write to serial port" << std::endl;
 			std::cout << "0. Close client" << std::endl;
 			std::cin >> option;
 		}

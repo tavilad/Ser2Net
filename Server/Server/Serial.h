@@ -7,8 +7,7 @@ class Serial
 {
 public:
 
-	//static Serial* getInstance();
-	Serial(boost::asio::io_service& io_service);
+	static Serial* getInstance(boost::asio::io_service& io_service);
 	void open(const std::string& portname);
 	void close();
 	bool isOpen();
@@ -23,7 +22,7 @@ public:
 	void handle_read(const boost::system::error_code& error);
 	~Serial();
 private:
-
+	Serial(boost::asio::io_service& io_service);
 	boost::asio::serial_port sPort;
 	char data_[50];
 };

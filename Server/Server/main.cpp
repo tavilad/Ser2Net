@@ -26,7 +26,10 @@ int main(int argc, char* argv[])
 
 		Server s(io_service, std::atoi(argv[1]));
 
-		//serial.write();
+		//Serial *serial = new Serial(io_service);
+		//serial->open("COM4");
+		//serial->close();
+		//serial->write();
 
 		std::cout << "Welcome to the server!" << std::endl;
 

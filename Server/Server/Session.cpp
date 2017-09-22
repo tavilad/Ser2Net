@@ -26,12 +26,13 @@ enum Commands
 	DAYTIME,
 	HELLO,
 	LIST,
+	OPEN_SERIAL_PORT,
 	WRITE_TO_SERIAL
 };
 
-Session::Session(boost::asio::io_service& io_service) : socket_(io_service)
+Session::Session(boost::asio::io_service& io_service) : socket_(io_service), io_service_(io_service)
 {
-	serial = new Serial(io_service);
+	//serial = new Serial(io_service);
 	//serial->open("COM4");
 }
 
@@ -109,10 +110,19 @@ void Session::menu()
 		}
 		break;
 	}
+	case Commands::OPEN_SERIAL_PORT:
+	{
+		Serial::getInstance(io_service_)->open("COM4");
+		boost::asio::async_write(socket_,
+			boost::asio::buffer("Port serial deschis"),
+			boost::bind(&Session::handle_write, this,
+			boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+	}
 	case Commands::WRITE_TO_SERIAL:
 	{
 		std::cout << "write serial" << std::endl;
-		serial->write();
+
+		Serial::getInstance(io_service_)->write();
 		boost::asio::async_write(socket_,
 			boost::asio::buffer("am scris"),
 			boost::bind(&Session::handle_write, this,

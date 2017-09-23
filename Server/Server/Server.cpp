@@ -20,15 +20,6 @@ void Server::start_accept()
 {
 	Session* new_session = new Session(io_service_);
 
-	/*if (Serial::getInstance()->isOpen())
-	{
-	std::cout << "deschis deja" << std::endl;
-	}
-	else
-	{
-	std::cout << "am deschis acum" << std::endl;
-	Serial::getInstance()->open("COM3");
-	}*/
 	acceptor_.async_accept(new_session->socket(),
 		boost::bind(&Server::handle_accept, this, new_session,
 		boost::asio::placeholders::error));

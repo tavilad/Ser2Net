@@ -129,30 +129,50 @@ void Session::menu()
 	case Commands::WRITE_TO_SERIAL:
 	{
 		std::cout << "write serial" << std::endl;
-
-		Serial::getInstance(io_service_)->write();
-		boost::asio::async_write(socket_,
-			boost::asio::buffer("am scris"),
-			boost::bind(&Session::handle_write, this,
-			boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
-		break;
-	}
-	case Commands::READ_FROM_SERIAL:
-	{
-		text = Serial::getInstance(io_service_)->read();
-		if (text.length() > 0)
+		if (!Serial::getInstance(io_service_)->isOpen())
 		{
 			boost::asio::async_write(socket_,
-				boost::asio::buffer(text),
+				boost::asio::buffer("Port serial inchis, deschideti pentru a scrie"),
 				boost::bind(&Session::handle_write, this,
 				boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
 		}
 		else
 		{
+			Serial::getInstance(io_service_)->write();
 			boost::asio::async_write(socket_,
-				boost::asio::buffer("nimic de citit"),
+				boost::asio::buffer("am scris"),
 				boost::bind(&Session::handle_write, this,
 				boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+		}
+
+		break;
+	}
+	case Commands::READ_FROM_SERIAL:
+	{
+		if (!Serial::getInstance(io_service_)->isOpen())
+		{
+			boost::asio::async_write(socket_,
+				boost::asio::buffer("Port serial inchis, deschideti pentru a citii"),
+				boost::bind(&Session::handle_write, this,
+				boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+		}
+		else
+		{
+			text = Serial::getInstance(io_service_)->read();
+			if (text.length() > 0)
+			{
+				boost::asio::async_write(socket_,
+					boost::asio::buffer(text),
+					boost::bind(&Session::handle_write, this,
+					boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+			}
+			else
+			{
+				boost::asio::async_write(socket_,
+					boost::asio::buffer("nimic de citit"),
+					boost::bind(&Session::handle_write, this,
+					boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+			}
 		}
 
 		break;

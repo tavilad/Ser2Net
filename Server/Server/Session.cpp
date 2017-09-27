@@ -56,16 +56,12 @@ void Session::start()
 
 void Session::menu()
 {
-	std::cout << "am intrat pe meniu" << std::endl;
-
 	int cmd = data_[0] - '0';
 
 	switch (cmd)
 	{
 	case Commands::DAYTIME:
 	{
-		std::cout << "day" << std::endl;
-
 		text = make_daytime_string();
 
 		boost::asio::async_write(socket_,
@@ -76,8 +72,6 @@ void Session::menu()
 	case Commands::HELLO:
 	{
 		text = "hi";
-
-		std::cout << "hi" << std::endl;
 
 		boost::asio::async_write(socket_,
 			boost::asio::buffer(text),
@@ -128,7 +122,6 @@ void Session::menu()
 	}
 	case Commands::WRITE_TO_SERIAL:
 	{
-		std::cout << "write serial" << std::endl;
 		if (!Serial::getInstance(io_service_)->isOpen())
 		{
 			boost::asio::async_write(socket_,
@@ -178,8 +171,6 @@ void Session::menu()
 		break;
 	}
 	}
-
-	std::cout << "am iesit din meniu" << std::endl;
 
 	//using memset in order to reset the data_ array
 	memset(data_, 0, sizeof data_);

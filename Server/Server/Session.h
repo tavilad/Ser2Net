@@ -18,7 +18,6 @@ class Session
 public:
 	Session(boost::asio::io_service& io_service);
 	tcp::socket& socket();
-	//Serial *serial;
 	void start();
 	void menu();
 	void handle_write(const boost::system::error_code& error, size_t len);
